@@ -2,12 +2,15 @@ package com.prush.bndrsntchtimer;
 
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.annotation.ColorInt;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -22,9 +25,11 @@ public class BndrsntchTimer extends View
     private static int DEFAULT_HEIGHT = 32;                     //px
     private static int DEFAULT_ROUND_RECT_RADIUS = 4;           //px
     private static final int DEFAULT_STROKE_WIDTH = 2;          //px
-    private static String DEFAULT_BACKGROUND_COLOR = "aqua";
+    private static int DEFAULT_PROGRESS_COLOR = android.R.color.holo_blue_light;
 
-    private String mBackgroundColor = DEFAULT_BACKGROUND_COLOR;
+    @SuppressLint( "ResourceAsColor" )
+    private @ColorInt
+    int mProgressColor = DEFAULT_PROGRESS_COLOR;
     private int mRoundRectRadius = DEFAULT_ROUND_RECT_RADIUS;
     private int mTimerHeight = DEFAULT_HEIGHT;
     private long mTimerDuration = DEFAULT_TIMER_DURATION;
@@ -49,31 +54,43 @@ public class BndrsntchTimer extends View
     public BndrsntchTimer( Context context )
     {
         super( context );
+
         init();
     }
 
     public BndrsntchTimer( Context context, @Nullable AttributeSet attrs )
     {
-        super( context, attrs );
+        this( context, attrs, 0 );
         init();
     }
 
     public BndrsntchTimer( Context context, @Nullable AttributeSet attrs, int defStyleAttr )
     {
         super( context, attrs, defStyleAttr );
+
+        TypedArray array = context.obtainStyledAttributes( attrs, R.styleable.BndrsntchTimer, defStyleAttr, 0 );
+        mProgressColor = array.getColor( R.styleable.BndrsntchTimer_progress_color, mProgressColor );
+
         init();
+
+        array.recycle();
     }
 
     private void init()
     {
         mRectF = new RectF();
 
+        initPaint();
+    }
+
+    @SuppressLint( "ResourceType" )
+    private void initPaint()
+    {
         mBackgroundPaint = new Paint();
         mBackgroundPaint = new Paint();
         mBackgroundPaint.setAntiAlias( true );
         mBackgroundPaint.setStrokeWidth( DEFAULT_STROKE_WIDTH );
-        mBackgroundPaint.setColor( Color.parseColor( mBackgroundColor ) );
-
+        mBackgroundPaint.setColor( mProgressColor );
     }
 
     private void start()
@@ -136,6 +153,17 @@ public class BndrsntchTimer extends View
         mOnTimerElapsedListener = onTimerElapsedListener;
     }
 
+    /**
+     * Sets the color for the progress indicator.
+     *
+     * @param progressColor the color of the progress indicator of {@link BndrsntchTimer}
+     */
+    @SuppressLint( "ResourceType" )
+    public void setProgressColorInt( @ColorInt final int progressColor )
+    {
+        mProgressColor = ContextCompat.getColor( getContext(), progressColor );
+        initPaint();
+    }
 
     @Override
     protected void onDraw( Canvas canvas )
