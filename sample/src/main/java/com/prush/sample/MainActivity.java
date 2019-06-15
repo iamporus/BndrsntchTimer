@@ -40,5 +40,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText( getApplicationContext(), "Finished", Toast.LENGTH_SHORT ).show();
             }
         } );
+
+        getLifecycle().addObserver( bndrsntchTimer.getLifecycleObserver() );
     }
 }
