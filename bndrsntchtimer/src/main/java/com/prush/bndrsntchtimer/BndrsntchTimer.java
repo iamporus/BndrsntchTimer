@@ -3,6 +3,9 @@ package com.prush.bndrsntchtimer;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.Lifecycle;
+import android.arch.lifecycle.LifecycleObserver;
+import android.arch.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -16,7 +19,7 @@ import android.util.Log;
 import android.view.View;
 
 @SuppressWarnings( { "unused", "SpellCheckingInspection" } )
-public class BndrsntchTimer extends View
+public class BndrsntchTimer extends View implements LifecycleObserver
 {
     private static final String TAG = "BndrsntchTimer";
     private static final String LEFT_POS_PROPERTY = "xLeftPos";
@@ -39,6 +42,9 @@ public class BndrsntchTimer extends View
     private RectF mRectF;
     private Paint mBackgroundPaint;
     private OnTimerElapsedListener mOnTimerElapsedListener;
+    private ValueAnimator mTransformValueAnimator;
+    private long mCurrentPlayTime;
+    private boolean mbViewVisible;
 
     /**
      * Callback to be invoked when Timer is elaspsed.
@@ -69,7 +75,11 @@ public class BndrsntchTimer extends View
         super( context, attrs, defStyleAttr );
 
         TypedArray array = context.obtainStyledAttributes( attrs, R.styleable.BndrsntchTimer, defStyleAttr, 0 );
-        mProgressColor = array.getColor( R.styleable.BndrsntchTimer_progress_color, mProgressColor );
+        mProgressColor = array.getColor( R.styleable.BndrsntchTimer_progress_color, -1 );
+        if( mProgressColor == -1 )
+        {
+            mProgressColor = ContextCompat.getColor( context, DEFAULT_PROGRESS_COLOR );
+        }
 
         init();
 
@@ -99,24 +109,27 @@ public class BndrsntchTimer extends View
                                                                                       mLeftXPosition - getPaddingRight(),
                                                                                       getWidth() / 2 - getPaddingRight() );
 
-        ValueAnimator transformValueAnimator = new ValueAnimator();
-        transformValueAnimator.setValues( propertyLeftPositionHolder );
-        transformValueAnimator.setDuration( mTimerDuration );
-        transformValueAnimator.addUpdateListener( new ValueAnimator.AnimatorUpdateListener()
+        mTransformValueAnimator = new ValueAnimator();
+        mTransformValueAnimator.setValues( propertyLeftPositionHolder );
+        mTransformValueAnimator.setDuration( mTimerDuration );
+        mTransformValueAnimator.addUpdateListener( new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
             public void onAnimationUpdate( ValueAnimator valueAnimator )
             {
-                mFactor = ( int ) valueAnimator.getAnimatedValue( LEFT_POS_PROPERTY );
-                invalidate();
-                if( mOnTimerElapsedListener != null && mFactor == ( getWidth() / 2 - getPaddingRight() ) )
+                if( mbViewVisible )
                 {
-                    mOnTimerElapsedListener.onTimerElapsed();
+                    mFactor = ( int ) valueAnimator.getAnimatedValue( LEFT_POS_PROPERTY );
+                    invalidate();
+                    if( mOnTimerElapsedListener != null && mFactor == ( getWidth() / 2 - getPaddingRight() ) )
+                    {
+                        mOnTimerElapsedListener.onTimerElapsed();
+                    }
                 }
             }
         } );
 
-        transformValueAnimator.start();
+        mTransformValueAnimator.start();
     }
 
     /**
@@ -226,6 +239,40 @@ public class BndrsntchTimer extends View
         }
 
         return result;
+    }
+
+    /**
+     * Returns a LifecycleObserver that expects to be notified when the LifecycleOwner changes state.
+     * Add this as a {@link LifecycleObserver} to {@link android.support.v7.app.AppCompatActivity} or
+     * {@link android.support.v4.app.Fragment}
+     *
+     * @return LifecycleObserver
+     */
+    public LifecycleObserver getLifecycleObserver()
+    {
+        return this;
+    }
+
+    @OnLifecycleEvent( Lifecycle.Event.ON_START )
+    private void onViewStarted()
+    {
+        mbViewVisible = true;
+        if( mTransformValueAnimator != null && !mTransformValueAnimator.isRunning() )
+        {
+            mTransformValueAnimator.setCurrentPlayTime( mCurrentPlayTime );
+            mTransformValueAnimator.start();
+        }
+    }
+
+    @OnLifecycleEvent( Lifecycle.Event.ON_STOP )
+    private void onViewStopped()
+    {
+        mbViewVisible = false;
+        if( mTransformValueAnimator != null && mTransformValueAnimator.isRunning() )
+        {
+            mCurrentPlayTime = mTransformValueAnimator.getCurrentPlayTime();
+            mTransformValueAnimator.cancel();
+        }
     }
 
 }
