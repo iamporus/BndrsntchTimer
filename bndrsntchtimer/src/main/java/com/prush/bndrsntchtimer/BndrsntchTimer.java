@@ -25,10 +25,10 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     private static final String LEFT_POS_PROPERTY = "xLeftPos";
 
     private static long DEFAULT_TIMER_DURATION = 10000;         //millis
-    private static int DEFAULT_HEIGHT = 32;                     //px
+    private static int DEFAULT_HEIGHT = 16;                     //px
     private static int DEFAULT_ROUND_RECT_RADIUS = 4;           //px
     private static final int DEFAULT_STROKE_WIDTH = 2;          //px
-    private static int DEFAULT_PROGRESS_COLOR = android.R.color.holo_blue_light;
+    private static int DEFAULT_PROGRESS_COLOR = android.R.color.white;
 
     @SuppressLint( "ResourceAsColor" )
     private @ColorInt
