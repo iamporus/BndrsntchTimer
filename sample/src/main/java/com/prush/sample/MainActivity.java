@@ -58,17 +58,20 @@ public class MainActivity extends AppCompatActivity
         bndrsntchTimer.setOnTimerElapsedListener( new BndrsntchTimer.OnTimerElapsedListener()
         {
             @Override
-            public void onTimerElapsed()
+            public void onTimeElapsed( long millis )
             {
-                Random random = new Random();
-                int choice = random.nextInt( 2 );
-                if( choice == 0 )
+                if( millis >= 10000 )
                 {
-                    ( ( TextView ) findViewById( R.id.leftChoiceTextView ) ).setTextColor( ContextCompat.getColor( getApplicationContext(), R.color.colorAccent ));
-                }
-                else
-                {
-                    ( ( TextView ) findViewById( R.id.rightChoiceTextView ) ).setTextColor( ContextCompat.getColor( getApplicationContext(), R.color.colorAccent ) );
+                    Random random = new Random();
+                    int choice = random.nextInt( 2 );
+                    if( choice == 0 )
+                    {
+                        ( ( TextView ) findViewById( R.id.leftChoiceTextView ) ).setTextColor( ContextCompat.getColor( getApplicationContext(), R.color.colorAccent ) );
+                    }
+                    else
+                    {
+                        ( ( TextView ) findViewById( R.id.rightChoiceTextView ) ).setTextColor( ContextCompat.getColor( getApplicationContext(), R.color.colorAccent ) );
+                    }
                 }
             }
         } );
