@@ -26,7 +26,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
 
     private static long DEFAULT_TIMER_DURATION = 10000;         //millis
     private static int DEFAULT_HEIGHT = 16;                     //px
-    private static int DEFAULT_ROUND_RECT_RADIUS = 4;           //px
+    private static int DEFAULT_ROUND_RECT_RADIUS = 0;           //px
     private static final int DEFAULT_STROKE_WIDTH = 2;          //px
     private static int DEFAULT_PROGRESS_COLOR = android.R.color.white;
 
@@ -53,8 +53,10 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     {
         /**
          * Notifies the implementer when timer has elapsed.
+         *
+         * @param millis ellapsed duration
          */
-        void onTimerElapsed();
+        void onTimeElapsed( long millis );
     }
 
     public BndrsntchTimer( Context context )
@@ -121,9 +123,9 @@ public class BndrsntchTimer extends View implements LifecycleObserver
                 {
                     mFactor = ( int ) valueAnimator.getAnimatedValue( LEFT_POS_PROPERTY );
                     invalidate();
-                    if( mOnTimerElapsedListener != null && mFactor == ( getWidth() / 2 - getPaddingRight() ) )
+                    if( mOnTimerElapsedListener != null )
                     {
-                        mOnTimerElapsedListener.onTimerElapsed();
+                        mOnTimerElapsedListener.onTimeElapsed( valueAnimator.getCurrentPlayTime() );
                     }
                 }
             }
