@@ -186,7 +186,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         mRectF.left = mLeftXPosition;
         mRectF.right = getWidth() - getPaddingRight() - mFactor;
 
-        mRectF.top = ( float ) ( getHeight() / 2 ) + getPaddingTop();
+        mRectF.top = getPaddingTop();
         mRectF.bottom = mRectF.top + mTimerHeight - getPaddingBottom();
 
         canvas.drawRoundRect( mRectF, mRoundRectRadius, mRoundRectRadius, mBackgroundPaint );
