@@ -1,14 +1,10 @@
 package com.prush.sample;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.prush.bndrsntchtimer.BndrsntchTimer;
@@ -28,7 +24,6 @@ public class MainActivity extends AppCompatActivity
 
         final BndrsntchTimer bndrsntchTimer = findViewById( R.id.timer );
         final TypedTextView textView = findViewById( R.id.stageTextView );
-        final RelativeLayout layout = findViewById( R.id.choiceLayout );
 
         textView.setTypedText( "Two roads diverged in a wood. Which one would you choose to travel?" );
         textView.setOnCharacterTypedListener( new TypedTextView.OnCharacterTypedListener()
@@ -39,18 +34,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d( "MainActivity", "onCharacterTyped: " + textView.getText().length() + " - " + index );
                 if( textView.getText().length() - 1 == index )
                 {
-                    ObjectAnimator valueAnimator = ObjectAnimator.ofFloat( layout, "alpha", 0f, 1f );
-                    valueAnimator.setDuration( 1000 );
-                    valueAnimator.start();
-
-                    valueAnimator.addListener( new AnimatorListenerAdapter()
-                    {
-                        @Override
-                        public void onAnimationEnd( Animator animation )
-                        {
-                            bndrsntchTimer.start( 10000 );
-                        }
-                    } );
+                    bndrsntchTimer.start( 10000 );
                 }
             }
         } );
@@ -77,5 +61,6 @@ public class MainActivity extends AppCompatActivity
         } );
 
         getLifecycle().addObserver( bndrsntchTimer.getLifecycleObserver() );
+        getLifecycle().addObserver( textView.getLifecycleObserver() );
     }
 }
