@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity
         bndrsntchTimer.setOnTimerElapsedListener( new BndrsntchTimer.OnTimerElapsedListener()
         {
             @Override
-            public void onTimeElapsed( long millis )
+            public void onTimeElapsed( long elapsedDuration, long totalDuration )
             {
-                if( millis >= 10000 )
+                if( elapsedDuration >= totalDuration )
                 {
                     Random random = new Random();
                     int choice = random.nextInt( 2 );
