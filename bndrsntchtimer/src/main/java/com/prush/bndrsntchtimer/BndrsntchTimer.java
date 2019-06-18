@@ -24,7 +24,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     private static final String TAG = "BndrsntchTimer";
     private static final String LEFT_POS_PROPERTY = "xLeftPos";
 
-    private static long DEFAULT_TIMER_DURATION = 10000;         //millis
     private static int DEFAULT_HEIGHT = 16;                     //px
     private static int DEFAULT_ROUND_RECT_RADIUS = 0;           //px
     private static final int DEFAULT_STROKE_WIDTH = 2;          //px
@@ -35,7 +34,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     int mProgressColor = DEFAULT_PROGRESS_COLOR;
     private int mRoundRectRadius = DEFAULT_ROUND_RECT_RADIUS;
     private int mTimerHeight = DEFAULT_HEIGHT;
-    private long mTimerDuration = DEFAULT_TIMER_DURATION;
+    private long mTimerDuration;
     private int mLeftXPosition;
     private int mFactor;
 
@@ -54,9 +53,10 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         /**
          * Notifies the implementer when timer has elapsed.
          *
-         * @param millis ellapsed duration
+         * @param elapsedDuration long ellapsed duration in millis
+         * @param totalDuration   long    total duration in millis
          */
-        void onTimeElapsed( long millis );
+        void onTimeElapsed( final long elapsedDuration, final long totalDuration );
     }
 
     public BndrsntchTimer( Context context )
@@ -125,7 +125,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
                     invalidate();
                     if( mOnTimerElapsedListener != null )
                     {
-                        mOnTimerElapsedListener.onTimeElapsed( valueAnimator.getCurrentPlayTime() );
+                        mOnTimerElapsedListener.onTimeElapsed( valueAnimator.getCurrentPlayTime(), mTimerDuration );
                     }
                 }
             }
