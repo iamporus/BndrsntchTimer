@@ -57,6 +57,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:padding="16dp"
+            android:visibility="invisible"
             android:text="Less Travelled"
             android:textColor="@android:color/white"/>
 
@@ -74,6 +75,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:padding="16dp"
+            android:visibility="invisible"
             android:text="More Travelled"
             android:textColor="@android:color/white"/>
 

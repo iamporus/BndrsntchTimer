@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.prush.bndrsntchtimer.BndrsntchTimer;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity
                 Log.d( "MainActivity", "onCharacterTyped: " + textView.getText().length() + " - " + index );
                 if( textView.getText().length() - 1 == index )
                 {
+                    findViewById( R.id.leftChoiceTextView ).setVisibility( View.VISIBLE );
+                    findViewById( R.id.rightChoiceTextView ).setVisibility( View.VISIBLE );
                     bndrsntchTimer.start( 10000 );
                 }
             }
