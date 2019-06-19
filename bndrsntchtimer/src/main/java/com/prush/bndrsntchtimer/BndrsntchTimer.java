@@ -109,7 +109,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
 
     private void startAnimation( final long currentPlayTime )
     {
-        Log.d( TAG, "startAnimation() called with: currentPlayTime = [" + currentPlayTime + "]" );
         PropertyValuesHolder propertyLeftPositionHolder = PropertyValuesHolder.ofInt( LEFT_POS_PROPERTY,
                                                                                       mLeftXPosition - getPaddingRight(),
                                                                                       getWidth() / 2 - getPaddingRight() );
@@ -165,8 +164,15 @@ public class BndrsntchTimer extends View implements LifecycleObserver
      */
     public void start( final long duration )
     {
-        mTimerDuration = duration;
-        startAnimation( 0 );
+        if( mCurrentPlayTime == 0 )
+        {
+            mTimerDuration = duration;
+            startAnimation( 0 );
+        }
+        else
+        {
+            Log.e( TAG, "start: ", new IllegalStateException( "Timer is already running." ) );
+        }
     }
 
     /**
@@ -179,7 +185,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     {
         mTimerDuration = duration;
         setOnTimerElapsedListener( listener );
-        start( 0 );
+        start( duration );
     }
 
     /**
@@ -237,7 +243,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     protected void onSizeChanged( int w, int h, int oldw, int oldh )
     {
         super.onSizeChanged( w, h, oldw, oldh );
-        Log.d( TAG, "onSizeChanged() called with: w = [" + w + "], h = [" + h + "], oldw = [" + oldw + "], oldh = [" + oldh + "]" );
         if( mCurrentPlayTime != 0 )
         {
             post( new Runnable()
@@ -300,7 +305,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     @OnLifecycleEvent( Lifecycle.Event.ON_START )
     private void onViewStarted()
     {
-        Log.d( TAG, "onViewStarted: " );
         mbViewVisible = true;
         if( mCurrentPlayTime != 0 )
         {
@@ -311,7 +315,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     @OnLifecycleEvent( Lifecycle.Event.ON_STOP )
     private void onViewStopped()
     {
-        Log.d( TAG, "onViewStopped: " );
         mbViewVisible = false;
         if( mTransformValueAnimator != null && mTransformValueAnimator.isRunning() )
         {
@@ -330,7 +333,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         savedState.setSavedDuration( mTimerDuration );
         savedState.setSavedFactor( mFactor );
         savedState.setSavedPosition( mLeftXPosition );
-        Log.d( TAG, "onSaveInstanceState: current: " + mCurrentPlayTime + ", total: " + mTimerDuration + ", factor: " + mLeftXPosition );
         return savedState;
     }
 
@@ -349,7 +351,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         {
             startAnimation( mCurrentPlayTime );
         }
-        Log.d( TAG, "onRestoreInstanceState: " + mCurrentPlayTime + ", total: " + mTimerDuration + ", factor: " + mLeftXPosition );
     }
 
     /**
