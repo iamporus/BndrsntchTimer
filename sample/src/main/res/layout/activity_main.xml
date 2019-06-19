@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/darker_gray"
+    android:background="#222222"
     tools:context=".MainActivity">
 
     <com.prush.typedtextview.TypedTextView
@@ -17,7 +17,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:gravity="left"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +31,7 @@
         android:id="@+id/choiceLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:alpha="0"
         android:background="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +42,7 @@
         <com.prush.bndrsntchtimer.BndrsntchTimer
             android:id="@+id/timer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="4dp"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="8dp"
             app:progress_color="@android:color/white"/>
@@ -56,10 +58,11 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:gravity="center"
             android:padding="16dp"
-            android:visibility="invisible"
-            android:text="Less Travelled"
-            android:textColor="@android:color/white"/>
+            android:text="Throw Tea over computer"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/rightChoiceTextView"
@@ -74,10 +77,11 @@
             android:layout_marginRight="16dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:gravity="center"
             android:padding="16dp"
-            android:visibility="invisible"
-            android:text="More Travelled"
-            android:textColor="@android:color/white"/>
+            android:text="Shout at Dad"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"/>
 
     </RelativeLayout>
 
