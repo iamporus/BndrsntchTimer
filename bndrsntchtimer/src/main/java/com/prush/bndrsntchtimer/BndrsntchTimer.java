@@ -150,7 +150,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
                     if( valueAnimator.getCurrentPlayTime() >= mTimerDuration )
                     {
                         //timer has elapsed.
-                        cleanup();
+                        cleanup( 500 );
                     }
 
                     if( mOnTimerElapsedListener != null )
@@ -164,7 +164,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         mTransformValueAnimator.start();
     }
 
-    private void cleanup()
+    private void cleanup( long delay )
     {
         postDelayed( new Runnable()
         {
@@ -172,10 +172,11 @@ public class BndrsntchTimer extends View implements LifecycleObserver
             public void run()
             {
                 mCurrentPlayTime = 0;
+                mLeftXPosition = 0;
                 mFactor = 0;
                 mTimerDuration = 0;
             }
-        }, 500 );
+        }, delay );
 
     }
 
@@ -195,6 +196,15 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         {
             Log.e( TAG, "start: ", new IllegalStateException( "Timer is already running." ) );
         }
+    }
+
+    /**
+     * Reset the timer for repeated usage.
+     */
+    public void reset()
+    {
+        cleanup( 0 );
+        invalidate();
     }
 
     /**
