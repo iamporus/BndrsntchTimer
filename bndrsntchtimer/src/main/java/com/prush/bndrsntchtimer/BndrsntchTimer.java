@@ -1,3 +1,18 @@
+/*
+ * Copyright 2019 Purushottam Pawar
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.prush.bndrsntchtimer;
 
 import android.animation.PropertyValuesHolder;
@@ -20,6 +35,9 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+/**
+ * A horizontal progress bar shrinking with time; similar to Bandersnatch choice interface.
+ */
 @SuppressWarnings( { "unused", "SpellCheckingInspection" } )
 public class BndrsntchTimer extends View implements LifecycleObserver
 {
@@ -125,18 +143,14 @@ public class BndrsntchTimer extends View implements LifecycleObserver
                 if( mbViewVisible )
                 {
                     mFactor = ( int ) valueAnimator.getAnimatedValue( LEFT_POS_PROPERTY );
+
+                    //re-draw view as per the new calculated factor
                     invalidate();
 
                     if( valueAnimator.getCurrentPlayTime() >= mTimerDuration )
                     {
-                        postDelayed( new Runnable()
-                        {
-                            @Override
-                            public void run()
-                            {
-                                cleanup();
-                            }
-                        }, 500 );
+                        //timer has elapsed.
+                        cleanup();
                     }
 
                     if( mOnTimerElapsedListener != null )
@@ -152,9 +166,17 @@ public class BndrsntchTimer extends View implements LifecycleObserver
 
     private void cleanup()
     {
-        mCurrentPlayTime = 0;
-        mFactor = 0;
-        mTimerDuration = 0;
+        postDelayed( new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                mCurrentPlayTime = 0;
+                mFactor = 0;
+                mTimerDuration = 0;
+            }
+        }, 500 );
+
     }
 
     /**
@@ -243,6 +265,8 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     protected void onSizeChanged( int w, int h, int oldw, int oldh )
     {
         super.onSizeChanged( w, h, oldw, oldh );
+
+        //if animation was running, timer wasn't elapsed.
         if( mCurrentPlayTime != 0 )
         {
             post( new Runnable()
@@ -250,6 +274,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
                 @Override
                 public void run()
                 {
+                    //start the animation from elasped time.
                     startAnimation( mCurrentPlayTime );
                 }
             } );
@@ -306,6 +331,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     private void onViewStarted()
     {
         mbViewVisible = true;
+        //if animation was running, timer wasn't elapsed.
         if( mCurrentPlayTime != 0 )
         {
             startAnimation( mCurrentPlayTime );
