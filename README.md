@@ -1,4 +1,8 @@
 # BndrsntchTimer
+[![License](https://img.shields.io/badge/License%20-Apache%202-337ab7.svg)](https://www.apache.org/licenses/LICENSE-2.0)
+[![MinSDK](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=15)
+[![Build Status](https://travis-ci.com/iamporus/BndrsntchTimer.svg?branch=master)](https://travis-ci.com/iamporus/BndrsntchTimer)
+
 A horizontal progress bar shrinking with time; similar to Bandersnatch choice interface.  
 ## Inspiration
 <img src="bandersnatch.png" width="600">
