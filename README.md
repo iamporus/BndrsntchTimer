@@ -3,6 +3,7 @@
 [![MinSDK](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=15)
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/iamporus/BndrsntchTimer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/iamporus/BndrsntchTimer/context:java)
 [![Build Status](https://travis-ci.com/iamporus/BndrsntchTimer.svg?branch=master)](https://travis-ci.com/iamporus/BndrsntchTimer)
+[![](https://jitpack.io/v/iamporus/BndrsntchTimer.svg)](https://jitpack.io/#iamporus/BndrsntchTimer)
 
 A horizontal progress bar shrinking with time; similar to Bandersnatch choice interface.  
 ## Inspiration
@@ -10,6 +11,27 @@ A horizontal progress bar shrinking with time; similar to Bandersnatch choice in
 
 ## Preview
 <img src="preview.gif">
+
+## Gradle
+* **Step 1.** Add the JitPack repository to your build file.
+
+Add following in your **Project level** build.gradle at the end of repositories:
+```
+allprojects {
+  repositories {
+    ...
+    maven { url 'https://jitpack.io' }
+  }
+}
+```
+* **Step 2.** Add the dependency
+```
+dependencies {
+  ...
+  implementation 'com.github.iamporus:BndrsntchTimer:x.y.z'
+}
+```
+The latest version of BndrsntchTimer is  [![](https://jitpack.io/v/iamporus/BndrsntchTimer.svg)](https://jitpack.io/#iamporus/BndrsntchTimer)
 
 
 ## Usage
