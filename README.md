@@ -16,7 +16,7 @@ A horizontal progress bar shrinking with time; similar to Bandersnatch choice in
 * **Step 1.** Add the JitPack repository to your build file.
 
 Add following in your **Project level** build.gradle at the end of repositories:
-```
+```gradle
 allprojects {
   repositories {
     ...
@@ -25,7 +25,7 @@ allprojects {
 }
 ```
 * **Step 2.** Add the dependency
-```
+```gradle
 dependencies {
   ...
   implementation 'com.github.iamporus:BndrsntchTimer:x.y.z'
@@ -38,7 +38,7 @@ The latest version of BndrsntchTimer is  [![](https://jitpack.io/v/iamporus/Bndr
 
 ### XML
 
-```
+```xml
  <com.prush.bndrsntchtimer.BndrsntchTimer
     android:id="@+id/timer"
     android:layout_width="match_parent"
@@ -50,7 +50,7 @@ The latest version of BndrsntchTimer is  [![](https://jitpack.io/v/iamporus/Bndr
 ```
 
 ### Java
-```
+```java
 final BndrsntchTimer bndrsntchTimer = findViewById( R.id.timer );
 
 //set progress color
