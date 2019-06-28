@@ -172,9 +172,15 @@ public class BndrsntchTimer extends View implements LifecycleObserver
             public void run()
             {
                 mCurrentPlayTime = 0;
-                mLeftXPosition = 0;
-                mFactor = 0;
+                mFactor = getWidth() / 2 - getPaddingRight();
                 mTimerDuration = 0;
+
+                if( mTransformValueAnimator != null && mTransformValueAnimator.isRunning() )
+                {
+                    mTransformValueAnimator.cancel();
+                }
+
+                invalidate();
             }
         }, delay );
 
@@ -204,7 +210,6 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     public void reset()
     {
         cleanup( 0 );
-        invalidate();
     }
 
     /**
