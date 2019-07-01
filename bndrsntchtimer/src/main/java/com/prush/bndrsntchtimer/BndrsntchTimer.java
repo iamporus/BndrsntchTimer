@@ -169,6 +169,8 @@ public class BndrsntchTimer extends View implements LifecycleObserver
 
     private void cleanup( long delay )
     {
+        mbTimerElapsed = true;
+
         postDelayed( new Runnable()
         {
             @Override
