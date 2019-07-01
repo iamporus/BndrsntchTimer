@@ -64,6 +64,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     private ValueAnimator mTransformValueAnimator;
     private long mCurrentPlayTime;
     private boolean mbViewVisible;
+    private boolean mbTimerElapsed;
 
     /**
      * Callback to be invoked when Timer is elaspsed.
@@ -150,6 +151,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
                     if( valueAnimator.getCurrentPlayTime() >= mTimerDuration )
                     {
                         //timer has elapsed.
+                        mbTimerElapsed = true;
                         cleanup( 500 );
                     }
 
@@ -162,6 +164,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         } );
 
         mTransformValueAnimator.start();
+        mbTimerElapsed = false;
     }
 
     private void cleanup( long delay )
@@ -233,6 +236,16 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     public void setOnTimerElapsedListener( final OnTimerElapsedListener onTimerElapsedListener )
     {
         mOnTimerElapsedListener = onTimerElapsedListener;
+    }
+
+    /**
+     * Returns true of the timer is still running, else false
+     *
+     * @return boolean true of the timer is still running, else false
+     */
+    public boolean isRunning()
+    {
+        return !mbTimerElapsed;
     }
 
     /**
