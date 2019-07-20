@@ -52,6 +52,8 @@ The latest version of BndrsntchTimer is  [![](https://jitpack.io/v/iamporus/Bndr
 ### Java
 ```java
 final BndrsntchTimer bndrsntchTimer = findViewById( R.id.timer );
+
+//add the lifecycle observer
 getLifecycle().addObserver( bndrsntchTimer.getLifecycleObserver() );
 
 //set progress color
