@@ -52,6 +52,7 @@ The latest version of BndrsntchTimer is  [![](https://jitpack.io/v/iamporus/Bndr
 ### Java
 ```java
 final BndrsntchTimer bndrsntchTimer = findViewById( R.id.timer );
+getLifecycle().addObserver( bndrsntchTimer.getLifecycleObserver() );
 
 //set progress color
 bndrsntchTimer.setProgressColorInt( android.R.color.holo_blue_bright );
