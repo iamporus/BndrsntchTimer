@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.prush.bndrsntchtimer.BndrsntchTimer;
 import com.prush.typedtextview.TypedTextView;
@@ -82,7 +84,30 @@ public class MainActivity extends AppCompatActivity
                     {
                         mRightChoiceView.setTextColor( ContextCompat.getColor( getApplicationContext(), android.R.color.white ) );
                     }
+
+                    Toast.makeText( getApplicationContext(), "Click on Left choice to reset timer, Right choice to start again.",
+                                    Toast.LENGTH_LONG ).show();
                 }
+            }
+        } );
+
+        mLeftChoiceView.setOnClickListener( new View.OnClickListener()
+        {
+            @Override
+            public void onClick( View view )
+            {
+                mBndrsntchTimer.reset();
+                mLeftChoiceView.setTextColor( ContextCompat.getColor( getApplicationContext(), android.R.color.white ) );
+            }
+        } );
+
+        mRightChoiceView.setOnClickListener( new View.OnClickListener()
+        {
+            @Override
+            public void onClick( View view )
+            {
+                mBndrsntchTimer.start( 10000 );
+                mRightChoiceView.setTextColor( ContextCompat.getColor( getApplicationContext(), android.R.color.white ) );
             }
         } );
 
