@@ -43,6 +43,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
 {
     private static final String TAG = "BndrsntchTimer";
     private static final String LEFT_POS_PROPERTY = "xLeftPos";
+    private static final int RESET_ANIM_DURATION = 1000;
 
     private static int DEFAULT_HEIGHT = 16;                     //px
     private static int DEFAULT_ROUND_RECT_RADIUS = 0;           //px
@@ -126,6 +127,21 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         mBackgroundPaint.setColor( mProgressColor );
     }
 
+    public long getTimerDuration()
+    {
+        return mTimerDuration;
+    }
+
+    private void setTimerDuration( long timerDuration )
+    {
+        mTimerDuration = timerDuration;
+    }
+
+    private void setTimerElapsed( boolean bTimerElapsed )
+    {
+        this.mbTimerElapsed = bTimerElapsed;
+    }
+
     private void startAnimation( final long currentPlayTime )
     {
         PropertyValuesHolder propertyLeftPositionHolder = PropertyValuesHolder.ofInt( LEFT_POS_PROPERTY,
@@ -151,8 +167,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
                     if( valueAnimator.getCurrentPlayTime() >= mTimerDuration )
                     {
                         //timer has elapsed.
-                        mbTimerElapsed = true;
-                        cleanup( 500 );
+                        setTimerElapsed( true );
                     }
 
                     if( mOnTimerElapsedListener != null )
@@ -164,31 +179,41 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         } );
 
         mTransformValueAnimator.start();
-        mbTimerElapsed = false;
+        setTimerElapsed( false );
     }
 
-    private void cleanup( long delay )
+    private void startResetAnimation()
     {
-        mbTimerElapsed = true;
+        // stop timer if it is currently running
+        if( mTransformValueAnimator != null && mTransformValueAnimator.isRunning() )
+        {
+            mTransformValueAnimator.cancel();
+        }
 
-        postDelayed( new Runnable()
+        PropertyValuesHolder propertyLeftPositionHolder = PropertyValuesHolder.ofInt( LEFT_POS_PROPERTY,
+                                                                                      getWidth() / 2 - getPaddingRight(),
+                                                                                      getPaddingLeft() );
+
+        mTransformValueAnimator = new ValueAnimator();
+        mTransformValueAnimator.setValues( propertyLeftPositionHolder );
+        mTransformValueAnimator.setDuration( RESET_ANIM_DURATION );
+        mTransformValueAnimator.addUpdateListener( new ValueAnimator.AnimatorUpdateListener()
         {
             @Override
-            public void run()
+            public void onAnimationUpdate( ValueAnimator valueAnimator )
             {
-                mCurrentPlayTime = 0;
-                mFactor = getWidth() / 2 - getPaddingRight();
-                mTimerDuration = 0;
-
-                if( mTransformValueAnimator != null && mTransformValueAnimator.isRunning() )
+                if( mbViewVisible )
                 {
-                    mTransformValueAnimator.cancel();
+                    mFactor = ( int ) valueAnimator.getAnimatedValue( LEFT_POS_PROPERTY );
+
+                    //re-draw view as per the new calculated factor
+                    invalidate();
+
                 }
-
-                invalidate();
             }
-        }, delay );
+        } );
 
+        mTransformValueAnimator.start();
     }
 
     /**
@@ -200,7 +225,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
     {
         if( mCurrentPlayTime == 0 )
         {
-            mTimerDuration = duration;
+            setTimerDuration( duration );
             startAnimation( 0 );
         }
         else
@@ -214,7 +239,10 @@ public class BndrsntchTimer extends View implements LifecycleObserver
      */
     public void reset()
     {
-        cleanup( 0 );
+        setTimerElapsed( true );
+        setTimerDuration( 0 );
+        mCurrentPlayTime = 0;
+        startResetAnimation();
     }
 
     /**
@@ -225,7 +253,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
      */
     public void start( final long duration, final OnTimerElapsedListener listener )
     {
-        mTimerDuration = duration;
+        setTimerDuration( duration );
         setOnTimerElapsedListener( listener );
         start( duration );
     }
@@ -389,6 +417,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         savedState.setSavedDuration( mTimerDuration );
         savedState.setSavedFactor( mFactor );
         savedState.setSavedPosition( mLeftXPosition );
+        savedState.setTimerElapsed( mbTimerElapsed );
         return savedState;
     }
 
@@ -402,6 +431,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         mTimerDuration = savedState.getSavedDuration();
         mFactor = savedState.getSavedFactor();
         mLeftXPosition = savedState.getSavedPosition();
+        mbTimerElapsed = savedState.isTimerElapsed();
 
         if( mCurrentPlayTime != 0 )
         {
@@ -418,6 +448,7 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         private long mSavedDuration;
         private int mSavedFactor;
         private int mSavedPosition;
+        private boolean mbTimerElapsed;
 
         private static final int PLAY_TIME_INDEX = 0, FACTOR_INDEX = 0;
         private static final int DURATION_INDEX = 1, POSITION_INDEX = 1;
@@ -481,6 +512,16 @@ public class BndrsntchTimer extends View implements LifecycleObserver
         private void setSavedPosition( int savedPosition )
         {
             mSavedPosition = savedPosition;
+        }
+
+        private void setTimerElapsed( boolean bTimerExhausted )
+        {
+            mbTimerElapsed = bTimerExhausted;
+        }
+
+        private boolean isTimerElapsed()
+        {
+            return mbTimerElapsed;
         }
 
         @Override
