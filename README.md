@@ -4,6 +4,7 @@
 [![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/iamporus/BndrsntchTimer.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/iamporus/BndrsntchTimer/context:java)
 [![Build Status](https://travis-ci.com/iamporus/BndrsntchTimer.svg?branch=master)](https://travis-ci.com/iamporus/BndrsntchTimer)
 [![](https://jitpack.io/v/iamporus/BndrsntchTimer.svg)](https://jitpack.io/#iamporus/BndrsntchTimer)
+[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-BndrsntchTimer-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7742)
 
 A horizontal progress bar shrinking with time; similar to Bandersnatch choice interface.  
 ## Inspiration
