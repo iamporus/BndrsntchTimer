@@ -18,8 +18,7 @@ import com.prush.typedtextview.TypedTextView;
 
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
 
     private BndrsntchTimer mBndrsntchTimer;
     private TypedTextView mTypedTextView;
@@ -27,91 +26,80 @@ public class MainActivity extends AppCompatActivity
     private TextView mLeftChoiceView;
     private TextView mRightChoiceView;
 
-    @SuppressLint( "ResourceAsColor" )
+    @SuppressLint("ResourceAsColor")
     @Override
-    protected void onCreate( Bundle savedInstanceState )
-    {
-        super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_main );
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        mBndrsntchTimer = findViewById( R.id.timer );
-        mTypedTextView = findViewById( R.id.stageTextView );
-        mRelativeLayout = findViewById( R.id.choiceLayout );
-        mLeftChoiceView = findViewById( R.id.leftChoiceTextView );
-        mRightChoiceView = findViewById( R.id.rightChoiceTextView );
+        mBndrsntchTimer = findViewById(R.id.timer);
+        mTypedTextView = findViewById(R.id.stageTextView);
+        mRelativeLayout = findViewById(R.id.choiceLayout);
+        mLeftChoiceView = findViewById(R.id.leftChoiceTextView);
+        mRightChoiceView = findViewById(R.id.rightChoiceTextView);
 
-        mTypedTextView.splitSentences( false );
-        mTypedTextView.setTypedText( "Dad asks Stefan about Lunch. Stefan just gets angry. How he should react?" );
+        mTypedTextView.splitSentences(false);
+        mTypedTextView.setTypedText("Dad asks Stefan about Lunch. Stefan just gets angry. How he should react?");
 
-        mTypedTextView.setOnCharacterTypedListener( new TypedTextView.OnCharacterTypedListener()
-        {
+        mTypedTextView.setOnCharacterTypedListener(new TypedTextView.OnCharacterTypedListener() {
             @Override
-            public void onCharacterTyped( char character, int index )
-            {
-                Log.d( "MainActivity", "onCharacterTyped: " + mTypedTextView.getText().length() + " - " + index );
-                if( mTypedTextView.getText().length() - 1 == index )
-                {
-                    ObjectAnimator objectAnimator = ObjectAnimator.ofFloat( mRelativeLayout, "alpha", 0f, 1f );
-                    objectAnimator.setDuration( 2000 );
-                    objectAnimator.addListener( new AnimatorListenerAdapter()
-                    {
+            public void onCharacterTyped(char character, int index) {
+                Log.d("MainActivity", "onCharacterTyped: " + mTypedTextView.getText().length() + " - " + index);
+                if (mTypedTextView.getText().length() - 1 == index) {
+                    ObjectAnimator objectAnimator = ObjectAnimator.ofFloat(mRelativeLayout, "alpha", 0f, 1f);
+                    objectAnimator.setDuration(2000);
+                    objectAnimator.addListener(new AnimatorListenerAdapter() {
                         @Override
-                        public void onAnimationEnd( Animator animation )
-                        {
-                            mBndrsntchTimer.start( 10000 );
+                        public void onAnimationEnd(Animator animation) {
+                            mBndrsntchTimer.start(10000);
                         }
-                    } );
+                    });
                     objectAnimator.start();
 
                 }
             }
-        } );
+        });
 
-        mBndrsntchTimer.setOnTimerElapsedListener( new BndrsntchTimer.OnTimerElapsedListener()
-        {
+        mBndrsntchTimer.setOnTimerElapsedListener(new BndrsntchTimer.OnTimerElapsedListener() {
             @Override
-            public void onTimeElapsed( long elapsedDuration, long totalDuration )
-            {
-                if( elapsedDuration >= totalDuration )
-                {
+            public void onTimeElapsed(long elapsedDuration, long totalDuration) {
+                if (elapsedDuration >= totalDuration) {
                     Random random = new Random();
-                    int choice = random.nextInt( 2 );
-                    if( choice == 0 )
-                    {
-                        mLeftChoiceView.setTextColor( ContextCompat.getColor( getApplicationContext(), android.R.color.white ) );
-                    }
-                    else
-                    {
-                        mRightChoiceView.setTextColor( ContextCompat.getColor( getApplicationContext(), android.R.color.white ) );
+                    int choice = random.nextInt(2);
+                    if (choice == 0) {
+                        mLeftChoiceView.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
+                    } else {
+                        mRightChoiceView.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
                     }
 
-                    Toast.makeText( getApplicationContext(), "Click on Left choice to reset timer, Right choice to start again.",
-                                    Toast.LENGTH_LONG ).show();
+                    Toast.makeText(getApplicationContext(), "Click on Left choice to reset timer, Right choice to start again.",
+                            Toast.LENGTH_LONG).show();
                 }
             }
-        } );
+        });
 
-        mLeftChoiceView.setOnClickListener( new View.OnClickListener()
-        {
+        mLeftChoiceView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick( View view )
-            {
-                mBndrsntchTimer.reset();
-                mLeftChoiceView.setTextColor( ContextCompat.getColor( getApplicationContext(), android.R.color.white ) );
+            public void onClick(View view) {
+                mBndrsntchTimer.reset(new BndrsntchTimer.OnTimerResetListener() {
+                    @Override
+                    public void onTimerResetCompleted() {
+                        Log.d("TAG", "onTimerResetCompleted: ");
+                    }
+                });
+                mLeftChoiceView.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
             }
-        } );
+        });
 
-        mRightChoiceView.setOnClickListener( new View.OnClickListener()
-        {
+        mRightChoiceView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick( View view )
-            {
-                mBndrsntchTimer.start( 10000 );
-                mRightChoiceView.setTextColor( ContextCompat.getColor( getApplicationContext(), android.R.color.white ) );
+            public void onClick(View view) {
+                mBndrsntchTimer.start(10000);
+                mRightChoiceView.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
             }
-        } );
+        });
 
-        getLifecycle().addObserver( mBndrsntchTimer.getLifecycleObserver() );
-        getLifecycle().addObserver( mTypedTextView.getLifecycleObserver() );
+        getLifecycle().addObserver(mBndrsntchTimer.getLifecycleObserver());
+        getLifecycle().addObserver(mTypedTextView.getLifecycleObserver());
     }
 }
