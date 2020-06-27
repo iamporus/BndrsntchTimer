@@ -348,6 +348,10 @@ public class BndrsntchTimer extends View implements LifecycleObserver {
                 result = desiredSize;
                 break;
             }
+            default:{
+                Log.e(TAG, "measureDimension: Invalid Measure Spec." );
+                break;
+            }
         }
 
         if (result < desiredSize) {
