@@ -20,9 +20,9 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.PropertyValuesHolder;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.arch.lifecycle.Lifecycle;
-import android.arch.lifecycle.LifecycleObserver;
-import android.arch.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -30,12 +30,14 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.ColorInt;
-import android.support.annotation.Nullable;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A horizontal progress bar shrinking with time; similar to Bandersnatch choice interface.
@@ -357,8 +359,8 @@ public class BndrsntchTimer extends View implements LifecycleObserver {
 
     /**
      * Returns a LifecycleObserver that expects to be notified when the LifecycleOwner changes state.
-     * Add this as a {@link LifecycleObserver} to {@link android.support.v7.app.AppCompatActivity} or
-     * {@link android.support.v4.app.Fragment}
+     * Add this as a {@link LifecycleObserver} to {@link androidx.appcompat.app.AppCompatActivity} or
+     * {@link Fragment}
      *
      * @return LifecycleObserver
      */
